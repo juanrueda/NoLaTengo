@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NoLaTengo.Dtos;
@@ -33,6 +34,32 @@ namespace NoLaTengo.Controllers {
         public async Task<IActionResult> AddCategory(AddCategoryDto newCategory)
         {
            return Ok(await _categoryService.AddCategory(newCategory));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updatedCategory)
+        {
+            ServiceResponse<GetCategoryDto> response = await _categoryService.UpdateCategory(updatedCategory);
+
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            ServiceResponse<List<GetCategoryDto>> response = await _categoryService.DeleteCategory(id);
+
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
         }
 
 
