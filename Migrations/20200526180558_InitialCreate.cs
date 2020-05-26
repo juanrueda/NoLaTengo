@@ -21,7 +21,7 @@ namespace NoLaTengo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Libros",
+                name: "Books",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -36,9 +36,9 @@ namespace NoLaTengo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Libros", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Libros_Categories_ElementCategoryId",
+                        name: "FK_Books_Categories_ElementCategoryId",
                         column: x => x.ElementCategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -46,7 +46,7 @@ namespace NoLaTengo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Peliculas",
+                name: "Movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -56,14 +56,14 @@ namespace NoLaTengo.Migrations
                     Finished = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Director = table.Column<string>(nullable: true),
-                    Duration = table.Column<DateTime>(nullable: false),
+                    Runtime = table.Column<int>(nullable: false),
                     ElementCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Peliculas", x => x.Id);
+                    table.PrimaryKey("PK_Movies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Peliculas_Categories_ElementCategoryId",
+                        name: "FK_Movies_Categories_ElementCategoryId",
                         column: x => x.ElementCategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -71,23 +71,23 @@ namespace NoLaTengo.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Libros_ElementCategoryId",
-                table: "Libros",
+                name: "IX_Books_ElementCategoryId",
+                table: "Books",
                 column: "ElementCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Peliculas_ElementCategoryId",
-                table: "Peliculas",
+                name: "IX_Movies_ElementCategoryId",
+                table: "Movies",
                 column: "ElementCategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Libros");
+                name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Peliculas");
+                name: "Movies");
 
             migrationBuilder.DropTable(
                 name: "Categories");

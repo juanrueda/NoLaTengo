@@ -7,7 +7,7 @@ namespace NoLaTengo.Data {
         public DataContext(DbContextOptions<DataContext> options) :base(options) {}
 
         public DbSet<Category> Categories {get; set; }
-        public DbSet<Book> Libros {get; set; }
-        public DbSet<Movie> Peliculas {get; set;}
+        public DbSet<Book> Books {get; set; }
+        public DbSet<Movie> Movies {get; set;}
     }
 }

@@ -51,7 +51,7 @@ namespace NoLaTengo.Migrations
 
                     b.HasIndex("ElementCategoryId");
 
-                    b.ToTable("Libros");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("NoLaTengo.Models.Category", b =>
@@ -82,9 +82,6 @@ namespace NoLaTengo.Migrations
                     b.Property<string>("Director")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Duration")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("ElementCategoryId")
                         .HasColumnType("int");
 
@@ -97,11 +94,14 @@ namespace NoLaTengo.Migrations
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Runtime")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ElementCategoryId");
 
-                    b.ToTable("Peliculas");
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("NoLaTengo.Models.Book", b =>

@@ -24,7 +24,7 @@ namespace NoLaTengo.Controllers {
         }
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public async Task<IActionResult> GetCategoryById(int id)
         {
             return Ok(await _categoryService.GetCategoryById(id));
 

@@ -11,7 +11,7 @@ namespace NoLaTengo.Models
         public string Description { get; set; }
 
         public string Director { get; set; }
-        public DateTime Duration { get; set; }
+        public int Runtime { get; set; }
         public Category ElementCategory { get; set; }
     }
 }
