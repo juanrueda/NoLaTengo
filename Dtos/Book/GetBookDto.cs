@@ -1,8 +1,10 @@
 using System;
 using NoLaTengo.Models;
 
-namespace NoLaTengo.Dtos {
-    public class GetBookDto {
+namespace NoLaTengo.Dtos
+{
+    public class GetBookDto
+    {
         public int Id { get; set; }
         public string ElementName { get; set; }
         public DateTime PublishedDate { get; set; }
@@ -11,6 +13,10 @@ namespace NoLaTengo.Dtos {
 
         public int PagesNumber { get; set; }
         public string Publisher { get; set; }
-        public Category ElementCategory { get; set; }
+
+        public string Author { get; set; }
+
+        public int CategoryId { get; set; }
+        public GetCategoryDto ElementCategory { get; set; }
     }
 }

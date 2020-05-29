@@ -13,5 +13,6 @@ namespace NoLaTengo.Models
         public string Director { get; set; }
         public int Runtime { get; set; }
         public Category ElementCategory { get; set; }
+        public int CategoryId { get; set ;}
     }
 }

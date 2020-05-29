@@ -21,16 +21,81 @@ namespace NoLaTengo.Services
             _mapper = mapper;
         }
 
+        public async Task<ServiceResponse<List<GetBookDto>>> GetAllBooks()
+        {
+            ServiceResponse<List<GetBookDto>> response = new ServiceResponse<List<GetBookDto>>();
+
+            List<Book> dbBooks = await _context.Books
+                                        .Include(c => c.ElementCategory) 
+                                        .ToListAsync();
+
+            response.Data = dbBooks.Select(b => _mapper.Map<GetBookDto>(b)).ToList();
+
+            return response;
+        }
+        
+        public async Task<ServiceResponse<GetBookDto>> GetBookById(int id)
+        {
+            ServiceResponse<GetBookDto> response = new ServiceResponse<GetBookDto>();
+
+            Book dbBook = await _context.Books
+                                    .Include(c => c.ElementCategory) 
+                                    .FirstOrDefaultAsync(b => b.Id == id);
+
+            response.Data = _mapper.Map<GetBookDto>(dbBook);
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<GetBookDto>> UpdateBook(UpdateBookDto updatedBook)
+        {
+            ServiceResponse<GetBookDto> response = new ServiceResponse<GetBookDto>();
+
+            try
+            {
+
+                Book dbBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == updatedBook.Id);
+
+                dbBook.ElementName = updatedBook.ElementName;
+                dbBook.Description = updatedBook.Description;
+                dbBook.Finished = updatedBook.Finished;
+                dbBook.PublishedDate = updatedBook.PublishedDate;
+                dbBook.PagesNumber = updatedBook.PagesNumber;
+                dbBook.Publisher = updatedBook.Publisher;
+                dbBook.CategoryId = updatedBook.CategoryId;
+                dbBook.Author = updatedBook.Author;
+                dbBook.ElementCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == dbBook.CategoryId);
+
+                _context.Books.Update(dbBook);
+                await _context.SaveChangesAsync();
+
+                response.Data = _mapper.Map<GetBookDto>(dbBook);
+            }
+
+            catch (Exception ex)
+            {
+                response.Sucess = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<List<GetBookDto>>> AddBook(AddBookDto newBook)
         {
             ServiceResponse<List<GetBookDto>> response = new ServiceResponse<List<GetBookDto>>();
 
             Book dbBook = _mapper.Map<Book>(newBook);
 
+            dbBook.ElementCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == dbBook.CategoryId);
+
             await _context.Books.AddAsync(dbBook);
             await _context.SaveChangesAsync();
 
-            response.Data = _context.Books.Select(b => _mapper.Map<GetBookDto>(b)).ToList();
+            response.Data = _context.Books
+                                        .Include(c => c.ElementCategory)
+                                        .Select(b => _mapper.Map<GetBookDto>(b))
+                                        .ToList();
 
             return response;
         }
@@ -45,65 +110,16 @@ namespace NoLaTengo.Services
                 _context.Books.Remove(dbBook);
                 await _context.SaveChangesAsync();
 
-                response.Data = _context.Books.Select(b => _mapper.Map<GetBookDto>(b)).ToList();
+                response.Data = _context.Books
+                                        .Include(c => c.ElementCategory)
+                                        .Select(b => _mapper.Map<GetBookDto>(b))
+                                        .ToList();
+
             }
-            catch(Exception ex)
-            {
-                response.Message = ex.Message;
-                response.Sucess = false;
-            }
-
-            return response;
-        }
-
-        public async Task<ServiceResponse<List<GetBookDto>>> GetAllBooks()
-        {
-            ServiceResponse<List<GetBookDto>> response = new ServiceResponse<List<GetBookDto>>();
-
-            List<Book> dbBooks = await _context.Books.ToListAsync();
-
-            response.Data = dbBooks.Select(b => _mapper.Map<GetBookDto>(b)).ToList();
-
-            return response;
-        }
-
-        public async Task<ServiceResponse<GetBookDto>> GetBookById(int id)
-        {
-            ServiceResponse<GetBookDto> response = new ServiceResponse<GetBookDto>();
-
-            Book dbBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
-
-            response.Data = _mapper.Map<GetBookDto>(dbBook);
-
-            return response;
-        }
-
-        public async Task<ServiceResponse<GetBookDto>> UpdateBook(UpdateBookDto updatedBook)
-        {
-            ServiceResponse<GetBookDto> response = new ServiceResponse<GetBookDto>();
-
-            try
-            {
-                Book dbBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == updatedBook.Id);
-
-                dbBook.Description = updatedBook.Description;
-                dbBook.ElementCategory = updatedBook.ElementCategory;
-                dbBook.ElementName = updatedBook.ElementName;
-                dbBook.Finished = updatedBook.Finished;
-                dbBook.PagesNumber = updatedBook.PagesNumber;
-                dbBook.PublishedDate = updatedBook.PublishedDate;
-                dbBook.Publisher = updatedBook.Publisher;
-
-                _context.Books.Update(dbBook);
-                await _context.SaveChangesAsync();
-
-                response.Data = _mapper.Map<GetBookDto>(dbBook);
-            }
-
             catch (Exception ex)
             {
-                response.Sucess = false;
                 response.Message = ex.Message;
+                response.Sucess = false;
             }
 
             return response;

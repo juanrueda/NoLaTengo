@@ -10,7 +10,7 @@ using NoLaTengo.Data;
 namespace NoLaTengo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200526180558_InitialCreate")]
+    [Migration("20200527142458_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,14 +109,14 @@ namespace NoLaTengo.Migrations
             modelBuilder.Entity("NoLaTengo.Models.Book", b =>
                 {
                     b.HasOne("NoLaTengo.Models.Category", "ElementCategory")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("ElementCategoryId");
                 });
 
             modelBuilder.Entity("NoLaTengo.Models.Movie", b =>
                 {
                     b.HasOne("NoLaTengo.Models.Category", "ElementCategory")
-                        .WithMany()
+                        .WithMany("Movies")
                         .HasForeignKey("ElementCategoryId");
                 });
 #pragma warning restore 612, 618
